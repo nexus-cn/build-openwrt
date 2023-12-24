@@ -19,7 +19,7 @@ sed -i "s|DISTRIB_REVISION='.*'|DISTRIB_REVISION='R$(date +%Y.%m.%d)'|g" package
 echo "DISTRIB_SOURCECODE='lede'" >>package/base-files/files/etc/openwrt_release
 
 # Modify default IP（FROM 192.168.1.1 CHANGE TO 192.168.31.4）
-# sed -i 's/192.168.1.3/192.168.1.6/g' package/base-files/files/bin/config_generate
+sed -i 's/192.168.1.3/192.168.1.6/g' package/base-files/files/bin/config_generate
 
 # Replace the default software source
 # sed -i 's#openwrt.proxy.ustclug.org#mirrors.bfsu.edu.cn\\/openwrt#' package/lean/default-settings/files/zzz-default-settings
@@ -30,10 +30,15 @@ echo "DISTRIB_SOURCECODE='lede'" >>package/base-files/files/etc/openwrt_release
 #
 # Add luci-app-amlogic
 # svn co https://github.com/ophub/luci-app-amlogic/trunk/luci-app-amlogic package/luci-app-amlogic
-svn co https://github.com/xiaorouji/openwrt-passwall/tree/main/luci-app-passwall package/passwall
-svn co https://github.com/xiaorouji/openwrt-passwall/tree/main/luci-app-passwall package/luci-app-passwall
-svn co https://github.com/pymumu/luci-app-smartdns package/luci-app-smartdns package/smartdns
-svn co https://github.com/pymumu/luci-app-smartdns package/luci-app-smartdns package/luci-app-smartdns
+# echo 'src-git amlogic https://github.com/ophub/luci-app-amlogic' >>feeds.conf.default
+src-git passwall_packages https://github.com/xiaorouji/openwrt-passwall.git;packages
+src-git passwall_luci https://github.com/xiaorouji/openwrt-passwall.git;luci
+# svn co https://github.com/xiaorouji/openwrt-passwall/tree/main/luci-app-passwall package/passwall
+# svn co https://github.com/xiaorouji/openwrt-passwall/tree/main/luci-app-passwall package/luci-app-passwall
+src-git smartdns_packages https://github.com/pymumu/smartdns.git;packages
+src-git smartdns_luci https://github.com/pymumu/luci-app-smartdns.git package/luci-app-smartdns;luci
+# git clone https://github.com/pymumu/smartdns.git package/smartdns
+# git clone https://github.com/pymumu/luci-app-smartdns.git package/luci-app-smartdns
 
 # Fix runc version error
 # rm -rf ./feeds/packages/utils/runc/Makefile
